@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Educational Tutor Chatbot</h1>
+    <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid gray; padding: 10px;"></div>
+    <input id="user-input" type="text" placeholder="Type your question here..." style="width: 80%; padding: 10px;">
+    <button onclick="sendMessage()" style="padding: 10px;">Send</button>
+
+    <script>
+        function sendMessage() {
+            const userInput = document.getElementById("user-input");
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Append user message to chat box
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+
+            // Send message to the backend
+            fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.reply) {
+                    chatBox.innerHTML += `<div><b>Tutor:</b> ${data.reply}</div>`;
+                } else {
+                    chatBox.innerHTML += `<div><b>Error:</b> Failed to get a response.</div>`;
+                }
+                chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll
+            });
+            
+            userInput.value = "";  // Clear input box
+        }
+    </script>
+</body>
+</html>
