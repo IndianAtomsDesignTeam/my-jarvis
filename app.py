@@ -52,7 +52,7 @@ def chat_with_llama():
 
         # Make API call to Groq with Llama model
         response = client.chat.completions.create(
-            model="llama-3.1-70b-versatile",  # Adjust this as needed
+            model="llama-3.3-70b-versatile",  # Adjust this as needed
             messages=messages,
             temperature=0.7,
             max_tokens=300,
